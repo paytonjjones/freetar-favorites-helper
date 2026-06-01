@@ -70,6 +70,7 @@ run("magick", [
 run(chrome, [
   "--headless=new",
   "--disable-gpu",
+  "--force-dark-mode",
   "--hide-scrollbars",
   "--allow-file-access-from-files",
   "--window-size=1280,800",
