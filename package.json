@@ -1,0 +1,11 @@
+{
+  "name": "freetar-favorites-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension to move Ultimate Guitar favorites into Freetar.",
+  "scripts": {
+    "test": "node test/shared.test.js",
+    "zip": "node scripts/package-extension.js"
+  },
+  "devDependencies": {}
+}

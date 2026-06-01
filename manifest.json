@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Freetar Favorites Helper",
+  "description": "Download Ultimate Guitar favorites as Freetar JSON and upload favorites into Freetar.",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Freetar Favorites Helper"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.ultimate-guitar.com/*"
+  ]
+}
