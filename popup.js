@@ -24,8 +24,25 @@
     return tabs[0];
   }
 
+  function requireFreetarTab(tab) {
+    const url = String(tab?.url || "");
+    if (/^chrome:\/\//i.test(url)) {
+      throw new Error("Switch to a Freetar tab first. Chrome blocks extensions from reading chrome:// pages, and this action only works on the active Freetar tab.");
+    }
+    const hasFreetarShape = Boolean(
+      url.startsWith("https://freetar.de")
+      || url.startsWith("https://www.freetar.de")
+      || url.startsWith("http://freetar.de")
+      || url.startsWith("http://www.freetar.de")
+    );
+    if (!hasFreetarShape) {
+      throw new Error("Switch to the Freetar tab you want to update, keep it focused, and try again. This action only runs on the active Freetar page.");
+    }
+  }
+
   async function uploadToCurrentTab(favorites) {
     const tab = await currentTab();
+    requireFreetarTab(tab);
     const [{ result }] = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       args: [favorites],
@@ -105,6 +122,7 @@
     setStatus("Clearing favorites from Freetar...", "");
     try {
       const tab = await currentTab();
+      requireFreetarTab(tab);
       const [{ result }] = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {

@@ -63,7 +63,7 @@ button:disabled {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-weight: 600;
   list-style: none;
   padding: 10px 0;
@@ -79,7 +79,8 @@ button:disabled {
 
 .disclosure {
   display: inline-block;
-  width: 1ch;
+  font-size: 18px;
+  line-height: 1;
   transition: transform 120ms ease;
 }
 
