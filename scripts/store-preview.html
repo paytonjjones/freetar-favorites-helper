@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Freetar Favorites Helper Preview</title>
+    <link rel="stylesheet" href="../popup.css">
+    <style>
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        background: #f3f4f6;
+      }
+
+      .preview-shell {
+        width: 420px;
+        padding: 18px;
+        border: 1px solid #dbe0e8;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+      }
+
+      main {
+        min-width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <main>
+        <h1><img class="title-icon" src="../store-icon.png" alt="">Freetar Favorites Helper</h1>
+        <button type="button">Get favorites from Ultimate Guitar (must be logged in)</button>
+        <button type="button">Upload to Freetar</button>
+        <details id="advanced" open>
+          <summary><span>Advanced</span><span class="disclosure" aria-hidden="true">▸</span></summary>
+          <div class="advanced-body">
+            <button type="button" class="destructive">Clear all Favorites from Freetar</button>
+          </div>
+        </details>
+        <p id="status">Ready to move favorites between Ultimate Guitar and Freetar.</p>
+      </main>
+    </div>
+  </body>
+</html>

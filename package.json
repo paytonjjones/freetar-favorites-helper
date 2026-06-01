@@ -5,7 +5,8 @@
   "description": "Chrome extension to move Ultimate Guitar favorites into Freetar.",
   "scripts": {
     "test": "node test/shared.test.js",
-    "zip": "node scripts/package-extension.js"
+    "zip": "node scripts/package-extension.js",
+    "store-assets": "node scripts/render-store-assets.js"
   },
   "devDependencies": {}
 }
