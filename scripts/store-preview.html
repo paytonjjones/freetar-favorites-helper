@@ -42,5 +42,17 @@
         <p id="status">Ready to move favorites between Ultimate Guitar and Freetar.</p>
       </main>
     </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      if (params.get("theme") === "dark") {
+        document.documentElement.style.colorScheme = "dark";
+        document.body.style.background = "#111827";
+        document.querySelector(".preview-shell").style.background = "#0f172a";
+        document.querySelector(".preview-shell").style.borderColor = "#334155";
+        document.querySelector(".preview-shell").style.boxShadow = "0 24px 70px rgba(0, 0, 0, 0.45)";
+        document.querySelector("h1").style.color = "#f8fafc";
+        document.querySelector("#status").style.color = "#cbd5e1";
+      }
+    </script>
   </body>
 </html>

@@ -39,6 +39,7 @@ const chrome = findChrome();
 const previewUrl = `file://${path.join(root, "scripts", "store-preview.html")}`;
 const rawScreenshot = path.join(tmpDir, "screenshot.png");
 const finalScreenshot = path.join(outDir, "screenshot-1.jpg");
+const finalDarkScreenshot = path.join(outDir, "screenshot-dark-1.jpg");
 const finalSmallPromo = path.join(outDir, "small-promo.jpg");
 const finalMarquee = path.join(outDir, "marquee-promo.jpg");
 
@@ -64,6 +65,30 @@ run("magick", [
   "-quality",
   "92",
   finalScreenshot
+]);
+
+run(chrome, [
+  "--headless=new",
+  "--disable-gpu",
+  "--hide-scrollbars",
+  "--allow-file-access-from-files",
+  "--window-size=1280,800",
+  `--screenshot=${rawScreenshot}`,
+  `${previewUrl}?theme=dark`
+]);
+
+run("magick", [
+  rawScreenshot,
+  "-background",
+  "white",
+  "-alpha",
+  "remove",
+  "-alpha",
+  "off",
+  "-strip",
+  "-quality",
+  "92",
+  finalDarkScreenshot
 ]);
 
 run("magick", [
@@ -108,5 +133,6 @@ run("magick", [
 
 console.log("Rendered store assets:");
 console.log(`- ${path.relative(root, finalScreenshot)}`);
+console.log(`- ${path.relative(root, finalDarkScreenshot)}`);
 console.log(`- ${path.relative(root, finalSmallPromo)}`);
 console.log(`- ${path.relative(root, finalMarquee)}`);
