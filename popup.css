@@ -61,6 +61,9 @@ button:disabled {
 
 #advanced > summary {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: 600;
   list-style: none;
   padding: 10px 0;
@@ -68,6 +71,16 @@ button:disabled {
 
 #advanced > summary::-webkit-details-marker {
   display: none;
+}
+
+#advanced[open] > summary .disclosure {
+  transform: rotate(90deg);
+}
+
+.disclosure {
+  display: inline-block;
+  width: 1ch;
+  transition: transform 120ms ease;
 }
 
 .advanced-body {
