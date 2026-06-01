@@ -5,7 +5,13 @@
   "version": "1.0.0",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Freetar Favorites Helper"
+    "default_title": "Freetar Favorites Helper",
+    "default_icon": {
+      "16": "store-icon.png",
+      "32": "store-icon.png",
+      "48": "store-icon.png",
+      "128": "store-icon.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
@@ -17,5 +23,11 @@
   ],
   "host_permissions": [
     "https://*.ultimate-guitar.com/*"
-  ]
+  ],
+  "icons": {
+    "16": "store-icon.png",
+    "32": "store-icon.png",
+    "48": "store-icon.png",
+    "128": "store-icon.png"
+  }
 }

@@ -17,9 +17,18 @@ main {
 }
 
 h1 {
+  align-items: center;
+  display: flex;
+  gap: 8px;
   margin: 0 0 2px;
   font-size: 16px;
   font-weight: 650;
+}
+
+.title-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 button {
