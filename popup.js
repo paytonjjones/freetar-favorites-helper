@@ -68,7 +68,7 @@
           };
         }
         localStorage.setItem("favorites", JSON.stringify(normalized));
-        location.reload();
+        setTimeout(() => location.reload(), 0);
         return { count: Object.keys(normalized).length };
       }
     });
@@ -136,7 +136,7 @@
             throw new Error("The active tab does not look like a Freetar page.");
           }
           localStorage.removeItem("favorites");
-          location.reload();
+          setTimeout(() => location.reload(), 0);
           return { count: 0 };
         }
       });
