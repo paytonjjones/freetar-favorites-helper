@@ -43,7 +43,7 @@
   async function uploadToCurrentTab(favorites) {
     const tab = await currentTab();
     requireFreetarTab(tab);
-    const [{ result }] = await chrome.scripting.executeScript({
+    const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       args: [favorites],
       func: (favoritesArg) => {
@@ -68,10 +68,14 @@
           };
         }
         localStorage.setItem("favorites", JSON.stringify(normalized));
-        setTimeout(() => location.reload(), 0);
         return { count: Object.keys(normalized).length };
       }
     });
+    const result = results?.[0]?.result;
+    if (!result || typeof result.count !== "number") {
+      throw new Error("Freetar did not confirm the update. Make sure the active tab is a live Freetar page, then try again.");
+    }
+    await chrome.tabs.reload(tab.id);
     return result;
   }
 
@@ -123,7 +127,7 @@
     try {
       const tab = await currentTab();
       requireFreetarTab(tab);
-      const [{ result }] = await chrome.scripting.executeScript({
+      const results = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
           const hasFreetarShape = Boolean(
@@ -136,10 +140,14 @@
             throw new Error("The active tab does not look like a Freetar page.");
           }
           localStorage.removeItem("favorites");
-          setTimeout(() => location.reload(), 0);
           return { count: 0 };
         }
       });
+      const result = results?.[0]?.result;
+      if (!result || typeof result.count !== "number") {
+        throw new Error("Freetar did not confirm the clear operation. Make sure the active tab is a live Freetar page, then try again.");
+      }
+      await chrome.tabs.reload(tab.id);
       setStatus("Cleared all favorites from Freetar.", "success");
       return result;
     } catch (error) {
