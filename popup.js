@@ -43,7 +43,8 @@
   async function uploadToCurrentTab(favorites) {
     const tab = await currentTab();
     requireFreetarTab(tab);
-    const results = await chrome.scripting.executeScript({
+    const count = Object.keys(favorites || {}).length;
+    await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       args: [favorites],
       func: (favoritesArg) => {
@@ -56,27 +57,11 @@
         if (!hasFreetarShape) {
           throw new Error("The active tab does not look like a Freetar page.");
         }
-        const normalized = {};
-        for (const [key, value] of Object.entries(favoritesArg || {})) {
-          const tabUrl = FreetarFavoritesHelper.tabPath(value.tab_url || key);
-          normalized[tabUrl] = {
-            artist_name: String(value.artist_name || ""),
-            song: String(value.song || ""),
-            rating: String(value.rating || "0"),
-            type: String(value.type || "Chords"),
-            tab_url: tabUrl
-          };
-        }
-        localStorage.setItem("favorites", JSON.stringify(normalized));
-        return { count: Object.keys(normalized).length };
+        localStorage.setItem("favorites", JSON.stringify(favoritesArg || {}));
       }
     });
-    const result = results?.[0]?.result;
-    if (!result || typeof result.count !== "number") {
-      throw new Error("Freetar did not confirm the update. Make sure the active tab is a live Freetar page, then try again.");
-    }
     await chrome.tabs.reload(tab.id);
-    return result;
+    return { count };
   }
 
   downloadButton.addEventListener("click", async () => {
@@ -127,7 +112,7 @@
     try {
       const tab = await currentTab();
       requireFreetarTab(tab);
-      const results = await chrome.scripting.executeScript({
+      await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
           const hasFreetarShape = Boolean(
@@ -140,16 +125,10 @@
             throw new Error("The active tab does not look like a Freetar page.");
           }
           localStorage.removeItem("favorites");
-          return { count: 0 };
         }
       });
-      const result = results?.[0]?.result;
-      if (!result || typeof result.count !== "number") {
-        throw new Error("Freetar did not confirm the clear operation. Make sure the active tab is a live Freetar page, then try again.");
-      }
       await chrome.tabs.reload(tab.id);
       setStatus("Cleared all favorites from Freetar.", "success");
-      return result;
     } catch (error) {
       setStatus(error.message, "error");
     } finally {
