@@ -33,6 +33,16 @@
     }
   }
 
+  function tabPath(value) {
+    if (!value) return "";
+    try {
+      const url = new URL(String(value), "https://www.ultimate-guitar.com");
+      return url.pathname.replace(/\/+$/, "");
+    } catch (_error) {
+      return String(value).split("#")[0].split("?")[0];
+    }
+  }
+
   function normalizeType(value) {
     const cleaned = cleanText(value);
     return TYPE_MAP[cleaned] || cleaned || "Chords";
@@ -70,7 +80,15 @@
       || input.share_url
       || input.song_url
     );
-    if (!isUltimateGuitarTabUrl(url)) return null;
+    const path = tabPath(
+      input.tab_url
+      || input.url
+      || input.href
+      || input.web_url
+      || input.share_url
+      || input.song_url
+    );
+    if (!path || !/^\/tab\//.test(path)) return null;
 
     const inferred = inferNamesFromUrl(url);
     const artist = cleanText(
@@ -98,7 +116,7 @@
       song,
       rating: cleanText(input.rating || input.votes || input.rate || "0"),
       type: normalizeType(input.type || input.tab_type || input.type_name || input.version || "Chords"),
-      tab_url: url
+      tab_url: path
     };
   }
 
@@ -128,7 +146,7 @@
 
     const byUrl = {};
     for (const favorite of candidates) {
-      byUrl[canonicalUrl(favorite.tab_url)] = favorite;
+      byUrl[tabPath(favorite.tab_url)] = favorite;
     }
     return byUrl;
   }
@@ -184,6 +202,7 @@
     normalizeFavorite,
     normalizeFavorites,
     parseJsonMaybe,
+    tabPath,
     stringifyFavorites
   };
 })(typeof globalThis !== "undefined" ? globalThis : window);

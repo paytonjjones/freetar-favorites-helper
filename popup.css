@@ -39,6 +39,11 @@ button:hover {
   border-color: #818cf8;
 }
 
+button.destructive:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
 button:disabled {
   cursor: progress;
   opacity: 0.65;
@@ -46,6 +51,28 @@ button:disabled {
 
 #favoritesFile {
   display: none;
+}
+
+#advanced {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 10px 10px;
+}
+
+#advanced > summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+  padding: 10px 0;
+}
+
+#advanced > summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-body {
+  display: grid;
+  gap: 8px;
 }
 
 #status {

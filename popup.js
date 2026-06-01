@@ -3,6 +3,7 @@
 
   const downloadButton = document.querySelector("#downloadFavorites");
   const uploadButton = document.querySelector("#uploadFavorites");
+  const clearButton = document.querySelector("#clearFavorites");
   const fileInput = document.querySelector("#favoritesFile");
   const status = document.querySelector("#status");
 
@@ -14,6 +15,7 @@
   function setBusy(isBusy) {
     downloadButton.disabled = isBusy;
     uploadButton.disabled = isBusy;
+    clearButton.disabled = isBusy;
   }
 
   async function currentTab() {
@@ -39,13 +41,13 @@
         }
         const normalized = {};
         for (const [key, value] of Object.entries(favoritesArg || {})) {
-          const url = String(value.tab_url || key).split("#")[0].split("?")[0];
-          normalized[url] = {
+          const tabUrl = FreetarFavoritesHelper.tabPath(value.tab_url || key);
+          normalized[tabUrl] = {
             artist_name: String(value.artist_name || ""),
             song: String(value.song || ""),
             rating: String(value.rating || "0"),
             type: String(value.type || "Chords"),
-            tab_url: url
+            tab_url: tabUrl
           };
         }
         localStorage.setItem("favorites", JSON.stringify(normalized));
@@ -88,6 +90,40 @@
       }
       const result = await uploadToCurrentTab(normalized);
       setStatus(`Uploaded ${result.count} favorite${result.count === 1 ? "" : "s"}.`, "success");
+    } catch (error) {
+      setStatus(error.message, "error");
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  clearButton.addEventListener("click", async () => {
+    const confirmed = window.confirm("Clear all favorites from the active Freetar tab? This will delete the local favorites stored in that tab.");
+    if (!confirmed) return;
+
+    setBusy(true);
+    setStatus("Clearing favorites from Freetar...", "");
+    try {
+      const tab = await currentTab();
+      const [{ result }] = await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: () => {
+          const hasFreetarShape = Boolean(
+            document.querySelector("#results")
+            || document.querySelector("input[name='search_term']")
+            || document.querySelector("meta[name='description']")?.content?.includes("freetar")
+            || document.title.toLowerCase().includes("freetar")
+          );
+          if (!hasFreetarShape) {
+            throw new Error("The active tab does not look like a Freetar page.");
+          }
+          localStorage.removeItem("favorites");
+          location.reload();
+          return { count: 0 };
+        }
+      });
+      setStatus("Cleared all favorites from Freetar.", "success");
+      return result;
     } catch (error) {
       setStatus(error.message, "error");
     } finally {

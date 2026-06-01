@@ -4,7 +4,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const sharedSource = fs.readFileSync(path.join(__dirname, "..", "shared.js"), "utf8");
-const context = { console };
+const context = { console, URL };
 vm.createContext(context);
 vm.runInContext(sharedSource, context);
 
@@ -28,12 +28,12 @@ const favorites = helper.normalizeFavorites({
 });
 
 assert.equal(Object.keys(favorites).length, 2);
-assert.deepEqual(JSON.parse(JSON.stringify(favorites["https://tabs.ultimate-guitar.com/tab/the-cure/just-like-heaven-chords-12345"])), {
+assert.deepEqual(JSON.parse(JSON.stringify(favorites["/tab/the-cure/just-like-heaven-chords-12345"])), {
   artist_name: "The Cure",
   song: "Just Like Heaven",
   rating: "4.8",
   type: "Chords",
-  tab_url: "https://tabs.ultimate-guitar.com/tab/the-cure/just-like-heaven-chords-12345"
+  tab_url: "/tab/the-cure/just-like-heaven-chords-12345"
 });
 
 const html = `
@@ -41,14 +41,14 @@ const html = `
 `;
 const fromHtml = helper.extractFavoritesFromHtml(html);
 assert.equal(Object.keys(fromHtml).length, 1);
-assert.equal(fromHtml["https://tabs.ultimate-guitar.com/tab/radiohead/no-surprises-chords-987"].song, "No Surprises");
+assert.equal(fromHtml["/tab/radiohead/no-surprises-chords-987"].song, "No Surprises");
 
 const reorderedAttributeHtml = `
   <div data-content="{&amp;quot;store&amp;quot;:{&amp;quot;tabs&amp;quot;:[{&amp;quot;artist&amp;quot;:&amp;quot;Bowie&amp;quot;,&amp;quot;title&amp;quot;:&amp;quot;Heroes&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https://tabs.ultimate-guitar.com/tab/david-bowie/heroes-chords-222&amp;quot;}]}}" class="foo js-store bar"></div>
 `;
 const fromReorderedHtml = helper.extractFavoritesFromHtml(reorderedAttributeHtml);
 assert.equal(Object.keys(fromReorderedHtml).length, 1);
-assert.equal(fromReorderedHtml["https://tabs.ultimate-guitar.com/tab/david-bowie/heroes-chords-222"].artist_name, "Bowie");
+assert.equal(fromReorderedHtml["/tab/david-bowie/heroes-chords-222"].artist_name, "Bowie");
 
 const freetarJson = helper.stringifyFavorites(favorites);
 assert.doesNotThrow(() => JSON.parse(freetarJson));
