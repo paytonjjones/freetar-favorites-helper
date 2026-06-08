@@ -2,15 +2,15 @@
   "manifest_version": 3,
   "name": "Freetar Favorites Helper",
   "description": "Download Ultimate Guitar favorites as Freetar JSON and upload favorites into Freetar.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Freetar Favorites Helper",
     "default_icon": {
-      "16": "store-icon.png",
-      "32": "store-icon.png",
-      "48": "store-icon.png",
-      "128": "store-icon.png"
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
     }
   },
   "background": {
@@ -25,9 +25,9 @@
     "https://*.ultimate-guitar.com/*"
   ],
   "icons": {
-    "16": "store-icon.png",
-    "32": "store-icon.png",
-    "48": "store-icon.png",
-    "128": "store-icon.png"
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   }
 }

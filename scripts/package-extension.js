@@ -18,7 +18,9 @@ const files = [
   "README.md"
 ];
 
-const result = spawnSync("zip", ["-q", "-r", outZip, ...files], {
+const dirs = ["icons"];
+
+const result = spawnSync("zip", ["-q", "-r", outZip, ...files, ...dirs], {
   cwd: root,
   stdio: "inherit"
 });
